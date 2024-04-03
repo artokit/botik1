@@ -12,13 +12,16 @@ router = Router()
 
 @router.message(Command("start"))
 async def start(message: Message):
+    utm = "null"
+
     if " " in message.text:
         utm = message.text.split(" ")[1]
-        db_api.add_user(message.chat.id, message.chat.username, utm)
-        data = json.loads(open("admin_settings.json", 'rb').read().decode())
-        await ApiService.send_status(utm, "start")
-        await message.answer_video(video=data["file_id"], caption=data["caption"], reply_markup=keyboards.start())
-        await message.bot.send_message(config.NOTIFICATION_CHANNEL, f"{message.chat.id}:{utm}:start")
+
+    db_api.add_user(message.chat.id, message.chat.username, utm)
+    data = json.loads(open("admin_settings.json", 'rb').read().decode())
+    await ApiService.send_start(utm, message.chat.id)
+    await message.answer_video(video=data["file_id"], caption=data["caption"], reply_markup=keyboards.start())
+    await message.bot.send_message(config.NOTIFICATION_CHANNEL, f"{message.chat.id}:{utm}:start")
 
 
 @router.chat_join_request()

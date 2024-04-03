@@ -21,3 +21,4 @@ def admin(keyboard: InlineKeyboardBuilder):
 @create_keyboard
 def start(keyboard: InlineKeyboardBuilder):
     keyboard.row(InlineKeyboardButton(text="🚀НАЧАТЬ🚀", url=json.load(open("admin_settings.json"))['url']))
+    keyboard.row(InlineKeyboardButton(text="🚀ЗАЙТИ В КАНАЛ🚀", url=json.load(open("admin_settings.json"))['url']))

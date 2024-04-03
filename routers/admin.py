@@ -24,11 +24,20 @@ async def change_hello(call: CallbackQuery, state: FSMContext):
 
 @router.message(AdminChangeStates.hello_message_change)
 async def get_hello_message(message: Message, state: FSMContext):
-    if not message.video:
-        return await message.answer("Забыл видео :(")
+    file_id = None
+    caption = None
+
+    if message.video:
+        file_id = message.video.file_id
+
+    if message.caption:
+        caption = message.caption
+
+    if message.text:
+        caption = message.text
 
     data: dict = json.loads(open("admin_settings.json", "rb").read().decode())
-    data.update({"file_id": message.video.file_id, "caption": message.caption or data["caption"]})
+    data.update({"file_id": file_id or data["file_id"], "caption": caption or data["caption"]})
     json.dump(data, open("admin_settings.json", "w"))
 
     await state.clear()
